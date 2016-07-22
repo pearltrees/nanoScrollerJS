@@ -1,6 +1,6 @@
-/*! nanoScrollerJS - v0.8.7 - 2015
+/*! nanoScrollerJS - v0.8.7 - 2016
 * http://jamesflorentino.github.com/nanoScrollerJS/
-* Copyright (c) 2015 James Florentino; Licensed MIT */
+* Copyright (c) 2016 James Florentino; Licensed MIT */
 (function(factory) {
   if (typeof define === 'function' && define.amd) {
     return define(['jquery'], function($) {
@@ -521,6 +521,7 @@
         down: (function(_this) {
           return function(e) {
             _this.isBeingDragged = true;
+            _this.wasReset = false;
             _this.offsetY = e.pageY - _this.slider.offset().top;
             if (!_this.slider.is(e.target)) {
               _this.offsetY = 0;
@@ -533,6 +534,10 @@
         })(this),
         drag: (function(_this) {
           return function(e) {
+            if (_this.wasReset) {
+              _this.wasReset = false;
+              _this.offsetY = e.pageY - _this.slider.offset().top;
+            }
             _this.sliderY = e.pageY - _this.$el.offset().top - _this.paneTop - (_this.offsetY || _this.sliderHeight * 0.5);
             _this.scroll();
             if (_this.contentScrollTop >= _this.maxScrollTop && _this.prevScrollTop !== _this.maxScrollTop) {
@@ -769,6 +774,7 @@
       this.events.scroll();
       this.pane.show();
       this.isActive = true;
+      this.wasReset = true;
       if ((content.scrollHeight === content.clientHeight) || (this.pane.outerHeight(true) >= content.scrollHeight && contentStyleOverflowY !== SCROLL)) {
         this.pane.hide();
         this.isActive = false;

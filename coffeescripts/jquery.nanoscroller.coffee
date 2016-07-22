@@ -494,6 +494,7 @@
       @events =
         down: (e) =>
           @isBeingDragged  = true
+          @wasReset = false
           @offsetY = e.pageY - @slider.offset().top
           @offsetY = 0 unless @slider.is e.target
           @pane.addClass @options.activeClass
@@ -505,6 +506,9 @@
           false
 
         drag: (e) =>
+          if @wasReset
+            @wasReset = false
+            @offsetY = e.pageY - @slider.offset().top
           @sliderY = e.pageY - @$el.offset().top - @paneTop - (@offsetY or @sliderHeight * 0.5)
           do @scroll
           if @contentScrollTop >= @maxScrollTop and @prevScrollTop isnt @maxScrollTop
@@ -713,6 +717,7 @@
 
       do @pane.show
       @isActive = true
+      @wasReset = true
       if (content.scrollHeight is content.clientHeight) or (
           @pane.outerHeight(true) >= content.scrollHeight and contentStyleOverflowY isnt SCROLL)
         do @pane.hide
