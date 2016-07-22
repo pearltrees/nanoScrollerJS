@@ -23,7 +23,7 @@ $contentClass: "nano-content" !default;
         overflow-x: hidden;
 
         &:focus {
-            outline: thin dotted;
+            outline: none;
         }
 
         &::-webkit-scrollbar {
